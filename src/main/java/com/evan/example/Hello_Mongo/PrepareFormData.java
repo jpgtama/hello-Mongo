@@ -1,6 +1,7 @@
 package com.evan.example.Hello_Mongo;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class PrepareFormData {
 		
 		ObjectMapper om = new ObjectMapper();
 		try {
-			for (String line : Files.readAllLines(Paths.get("C:/Users/310199253/Documents/Philips/Sql Server Export", "formdata2.txt"))) {
+			for (String line : Files.readAllLines(Paths.get(PrepareResearchData.class.getResource("/formData2.txt").toURI()))) {
 				// split by '\t'
 				String[] fields = line.split("\t");
 				
@@ -54,7 +55,7 @@ public class PrepareFormData {
 				dataList.add(resultDocument);
 				
 			}
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -1,6 +1,7 @@
 package com.evan.example.Hello_Mongo;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -14,8 +15,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PrepareResearchData {
 	
-	public static List<Document> getData() throws IOException {
-		List<String> lines = Files.readAllLines(Paths.get("C:/Users/310199253/Documents/Philips/Sql Server Export", "researchData2.txt"));
+	public static void main(String[] args) {
+		getData();
+	}
+	
+	public static List<Document> getData() {
+		List<String> lines = new ArrayList<>();
+		try {
+			lines = Files.readAllLines(Paths.get(PrepareResearchData.class.getResource("/researchData2.txt").toURI()));
+		} catch (IOException | URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// result document
 		List<Document> researchDataList = new ArrayList<Document>();
@@ -49,8 +60,15 @@ public class PrepareResearchData {
 			researchDataMap.get(researchDataId).put(formDataId, new Document());
 			((Map) researchDataMap.get(researchDataId).get(formDataId)).put("_id", formDataId);
 			((Map) researchDataMap.get(researchDataId).get(formDataId)).put("defId", formDefId);
+			
 			// get form data map
-			Map formDataDoc = om.readValue(formData, Document.class);
+			Map formDataDoc = null;
+			try {
+				formDataDoc = om.readValue(formData, Document.class);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			((Map) researchDataMap.get(researchDataId).get(formDataId)).put("data", formDataDoc);
 			
 		}
